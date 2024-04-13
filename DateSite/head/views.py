@@ -4,6 +4,7 @@ from .models import *
 from django.contrib.auth import login, logout
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 def home(request):
     action = request.GET.get('action')
@@ -123,6 +124,11 @@ def settings(request, pk):
 
 @login_required(login_url='/head/home/')
 def search(request):
+    search = request.GET.get('search')
+    search_users = Profile.objects.all()
+    search_users = search_users.filter(
+        user__username__icontains=search
+    ) if search else None
     account = Profile.objects.get(user__pk=request.user.pk)
     form = SearchForm(request.POST or None)
     profiles = []
@@ -164,7 +170,7 @@ def search(request):
                     profiles=q_profiles+t_profiles
             
     print(profiles)
-    return render(request, 'search.html', {'account': account, 'form': form, 'profiles': profiles})
+    return render(request, 'search.html', {'account': account, 'form': form, 'profiles': profiles, 'search_users': search_users, 'search': search})
 
 
 
