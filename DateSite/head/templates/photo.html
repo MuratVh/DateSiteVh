@@ -1,0 +1,61 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+
+
+{% block content %}
+<h1 class="has-text-centered title" style="font-family: 'Comic Sans MS'; margin-top: 10px">Мои фоторгафии</h1>
+<div class="box has-background-warning-light" style="height: 86vh; overflow: scroll">
+
+
+    <div class="gallery">
+        <a href="{% url 'head:photo' user.pk %}?action=add_photo" style="color: white;"
+            class="button is-danger">
+            <div class="">Добавить фотографию</div>
+            <ion-icon name="camera-outline"></ion-icon>
+        </a>
+        <div class="modal {% if confirm %} is-active {% endif %}">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="has-text-right">
+                            <a href="{% url 'head:photo' user.pk %}">
+                                <ion-icon class="is-size-3" name="close-outline"></ion-icon>
+                            </a>
+                        </div>
+                        {% csrf_token %}
+                        {{form}}
+                        <button class="button is-danger" type="submit">Загрузить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="columns is-multiline" >
+            {% for my_photo in account.my_photos.all %}
+            <div class="column is-4">
+                <div class="user-card" style="width: 380px; height: 400px; margin-bottom: -200px;">
+                    <div class="box" style="width: 93%; margin-top: 50px; margin-left: 10px; box-shadow: 0 0 5px 5px #fcd4dc">
+                        <figure class="image photo-image" >
+                            <img class="" src="{{ my_photo.photo.url }}">
+                        </figure>
+                        
+                        <div class="has-text-right" style="margin-top: 5px; margin-bottom: -15px;">
+                            <a href="{% url 'head:delete_photo' my_photo.pk %}" 
+                                class="" style="height: 30px; width: 30px;">
+                                <ion-icon class="" name="trash-outline" 
+                                style="color: black; height: 3vh; width: 2.5vw; margin-right: -25px;"></ion-icon>
+                            </a>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

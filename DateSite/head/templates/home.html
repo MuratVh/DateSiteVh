@@ -1,0 +1,153 @@
+{% load static from static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'static/bulma.css' %}">
+    <link rel="stylesheet" href="{% static 'static/style.css' %}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+
+<nav role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="{% url 'head:home' %}">
+            <img src="{% static 'static/images/logo.png' %}">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+           data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start" style="font-size: 22px; font-weight: bold; font-family: 'Comic Sans MS'">
+
+            <a class="navbar-item" style="color: darkorange">
+                О нас
+            </a>
+
+            <a class="navbar-item" style="color: darkorange">
+                Контакты
+            </a>
+
+            <a class="navbar-item" style="color: darkorange">
+                FAQ
+            </a>
+
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link" style="color: darkorange">
+                    Советы по безопастности
+                </a>
+
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" style="color: darkorange">
+                        Правила сообщества
+                    </a>
+                    <a class="navbar-item" style="color: darkorange">
+                        Центр безопастности и разроботки
+                    </a>
+                    <a class="navbar-item" style="color: darkorange">
+                        Предложения и жалобы
+                    </a>
+                    <hr class="navbar-divider">
+                    <a class="navbar-item" style="color: darkorange">
+                        Безопастность
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    <div class="button is-warning"
+                         style="margin: 3px; border: #4a4a4a; box-shadow: 0 0 5px 5px #fff3d1">
+                        <a href="{% url 'users:sign_up' %}" style="color: #7a7a7a">Создать аккаунт</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<section class="section">
+    <div class="container">
+        <div class="title has-text-centered">
+            <h1 style="color: orangered; font-family: 'Academy Engraved LET'; font-size: 170px; margin: 20px; padding: 1px; margin-top: 50px">
+                ClICKDATE</h1>
+        </div>
+        <div class="subtitle"
+             style="text-align: center; font-family: 'Brush Script MT'; color: lightgoldenrodyellow; font-size: 80px; padding: 1px">
+            <p>"Любовь и точка!"</p>
+        </div>
+
+        <div class="enter has-text-centered"
+             style="margin-top: 40px; padding: 5px; border-radius: 15%">
+            <a href="{% url 'head:home' %}?action=log_in" class="button is-danger"
+                   style="color: white; font-size: 22px; box-shadow: 0 0 10px 10px #fabdc9; width: 270px; height: 60px">
+                    Войти в аккаунт
+            </a>
+        </div>
+
+        <div class="modal {% if confirm_login %} is-active {% endif %}">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+
+                <div class="columns is-centered mt-3">
+                    <div class="column is-6">
+                        <div class="box has-background"
+                             style="background-color: lavenderblush; box-shadow: 0 0 5px 5px #fabdc9">
+                            <form method="post">
+                                <div class="has-text-right">
+                                    <a href="{% url 'head:home' %}">
+                                        <ion-icon class="is-size-3" name="close-outline"></ion-icon>
+                                    </a>
+                                </div>
+                                <div class="title is-2 has-text-centered" style="font-family: 'Comic Sans MS'">
+                                    Вход
+                                </div>
+                                {% csrf_token %}
+                                {% for field in form %}
+                                    <div class="field">
+                                        <label for="{{ field.id_for_label }}" class="label">
+                                            {{ field.label }}
+                                        </label>
+                                        <div class="control">
+                                            {{ field }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                                {% if form.errors %}
+                                    <ul>
+                                        {% for error in form.errors.values %}
+                                            <li class="has-text-danger">{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                <div class="has-text-centered">
+                                    <button class="button is-danger is-fullwidth">
+                                        Войти
+                                    </button>
+                                </div>
+                                <br>
+                                <div class="has-text-centered">
+                                    <p>У вас нет аккаунта?</p>
+                                    <div class="button">
+                                        <a href="{% url 'users:sign_up' %}">Создать аккаунт</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>

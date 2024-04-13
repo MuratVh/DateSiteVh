@@ -1,0 +1,28 @@
+{% load static from static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'static/bulma.css' %}">
+    <link rel="stylesheet" href="{% static 'static/style.css' %}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+
+<div class="columns">
+    <div class="column pt-3 mr-5">
+        <div class="columns is-vcentered is-multiline" style="margin-bottom: 0; padding-bottom: 1px">
+            <div class="column">
+                <div class="subtitle has-text-right"
+                     style="color: orangered; font-family: 'Academy Engraved LET'; font-size: 50px; margin: 1px; margin-top: 5px; padding: 5px; bottom: 1px">
+                    CLICKDATE
+                </div>
+            </div>
+        </div>
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+</body>

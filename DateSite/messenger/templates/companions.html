@@ -1,0 +1,85 @@
+{% extends 'base_layout.html' %}
+{% load static from static %}
+
+{% block content %}
+<h1 class="has-text-centered title" style="font-family: 'Comic Sans MS'; margin-top: 10px">Мои собеседники</h1>
+<div class="box has-background-warning-light" style="height: 86vh; overflow: scroll">
+    {% if chats_data %}
+    
+    <div class="box">
+        {% for data in chats_data %}
+        <hr>
+        <div class="columns">
+            <div class="column is-2" id="column">
+                
+                {% if data.0.user != account.user %}
+                <a href="{% url 'head:profile' data.0.user.pk %}">
+                    <img src="{{ data.0.image.url }}" alt=""  class="image is-128x128" style="border-radius: 100%;">
+                </a>
+                <div class="">
+                    <div class="title is-3 ml-4">{{ data.0 }}</div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="column" id="column">
+                {% if data.2.1 %}
+                <article class="message is-info" style="width: 350px;">
+                    <div class="message-header">
+                        <div class="has-text-right">
+                            {% if data.1.1 %}
+                            {{ data.1.1 }}
+                            {% else %}
+
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="message-body" >
+                        {{ data.2.1 }}
+                    </div>
+                </article>
+                {% else %}
+                <p>{{ data.0 }} еще не ответил(а)</p>
+                {% endif %}
+                <!-- <div class="">{{ data.1.1 }}</div> 
+                <div class="has-text-right">
+                    {{ data.2.1 }} 
+                </div> -->
+            </div>
+            
+            <div class="column has-text-right" style="padding-top: 100px;" id="column">
+                {% if data.2.0 %}
+                <article class="message is-primary" style="margin-left: 150px; width: 350px;">
+                    <div class="message-header">
+                        <p>Вы</p>
+                        <div class="has-text-right">{{ data.1.0 }}</div>
+                    </div>
+                    <div class="message-body" >
+                        {{ data.2.0 }}
+                    </div>
+                </article>
+                {% else %}
+                <p style="padding-top: 100px;">Вы еще не ответили</p>
+                {% endif %}
+                <a href="{% url 'messenger:chat' data.0.pk %}" style="padding-bottom: 20px;">К диалогу --></a>
+                <!-- <div class="">{{ data.1.0 }}</div> 
+                <div class="has-text-right">
+                    {{ data.2.0 }} 
+                </div> -->
+                <!-- <div class="" >
+                    <img src="{{ account.image.url }}" alt="" class="image is-64x64" style="padding-right: 10px; border-radius: 100%;">
+                </div> -->
+            </div>
+            
+        </div>
+        
+        {% endfor %}
+    </div>
+        
+    {% else %}
+    <a href="{% url 'head:search' %}" class="">
+        Найдите собеседников
+    </a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base_layout.html' %}
+{% load static from static %}
+
+{% block content %}
+<h1 class="has-text-centered title" style="font-family: 'Comic Sans MS'; margin-top: 10px">Мои сообщения</h1>
+<div class="box has-background-warning-light" style="height: 86vh; overflow: scroll">
+    {% if request.user != companion_pk.user %}
+    <div class="">
+        <a href="{% url 'head:profile' companion.user.pk %}">
+            <img src="{{ companion.image.url }}" alt="" class="image is-128x128" style="border-radius: 100%;">
+        </a>
+        <h1 style="font-size: xx-large;">
+            {{companion}}
+        </h1>
+    </div>
+    <div class="box" style="height: 60vh; overflow: scroll">
+        {% for data in chat_data %}
+
+        {% if data.user == request.user %}
+        <article class="message is-primary" style="margin-left: 750px; width: 350px;">
+            <div class="message-header">
+                <p>{{data.user}}</p>
+                <div class="has-text-right">{{ data.date }}</div>
+                <a href="{% url 'messenger:delete_message' data.id %}?action=delete"> 
+                    <ion-icon name="close-outline"></ion-icon>
+                </a>
+            </div>
+            <div class="message-body">
+                {{ data.message }}
+            </div>
+        </article>
+        <div>
+
+        </div>
+        {% else %}
+        <article class="message is-info" style="width: 350px;">
+            <div class="message-header">
+                <p>{{data.user}}</p>
+                <div class="has-text-right">{{ data.date }}</div>
+            </div>
+            <div class="message-body">
+                {{ data.message }}
+            </div>
+        </article>
+        <div>
+
+        </div>
+        {% endif %}
+        {% endfor %}
+
+    </div>
+    <div class="" style="width: 650px;">
+        <form method="post" class="message has-text-left">
+            {% csrf_token %}
+            <div class="field has-addons">
+                {% for field in form %}
+                {{ field }}
+                {% endfor %}
+                <button class="button is-danger" style="margin-left: 5px;">
+                    Отправить
+                </button>
+            </div>
+        </form>
+    </div>
+    {% else %}
+    <p>Нельзя написать самому себе</p>
+    {% endif %}
+</div>
+{% endblock %}

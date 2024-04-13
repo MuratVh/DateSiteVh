@@ -1,0 +1,49 @@
+{% extends 'user_layout.html' %}
+{% load static from static %}
+
+{% block content %}
+    <div class="columns is-centered mt-3">
+        <div class="column is-4">
+            <div class="box" style="background-color: lavenderblush; box-shadow: 0 0 5px 5px lightpink">
+                    <form method="post">
+                        <div class="has-text-right">
+                            <a href="{% url 'head:home' %}">
+                                <ion-icon class="is-size-3" name="close-outline"></ion-icon>
+                            </a>
+                        </div>
+                        <div class="title is-2 has-text-centered" style="font-family: 'Comic Sans MS'">
+                            Регистрация
+                        </div>
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="field">
+                                <label for="{{ field.id_for_label }}" class="label">
+                                    {{ field.label }}
+                                </label>
+                                <div class="control">
+                                    {{ field }}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% if form.errors %}
+                            <ul>
+                                {% for error in form.errors.values %}
+                                    <li class="has-text-danger">{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <div class="has-text-centered">
+                            <button class="button is-danger is-fullwidth">
+                                Отправить
+                            </button>
+                            <br>
+                            <a href="{% url 'head:home' %}" class="button is-warning is-fullwidth" type="submit">
+                                Назад
+                            </a>
+                        </div>
+                    </form>
+                    </div>
+        </div>
+    </div>
+{% endblock %}

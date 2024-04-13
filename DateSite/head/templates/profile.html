@@ -1,0 +1,209 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="columns">
+        <div class="column pt-3 mr-5">
+            <div class="box has-background-warning-light" style="height: 86vh; overflow: scroll">
+                <div class="columns is-vcentered is-multiline">
+                    <div class="column is-4" style="margin-bottom: 1px; padding-bottom: 1px">
+                        <div class="box" style="box-shadow: 0 0 5px 5px #fcd4dc">
+                            <figure class="image profile-image">
+                                <img src="{{ account.image.url }}" alt="" style="border-radius: 0%;">
+                            </figure>
+                            {% if account.user == request.user %}
+                                <a href="{% url 'head:edit_photo' user.pk %}?action=photo" style="color: white; border-radius: 0%;"
+                                   class="button is-danger is-fullwidth">
+                                    <div class="">Изменить фотографию</div>
+                                    <ion-icon name="camera-outline"></ion-icon>
+                                </a>
+                                {% if account.image != 'default-profile-photo.png' %}
+                                    <a href="{% url 'head:edit_photo' user.pk %}?action=delete" style="color: white; border-radius: 0%;"
+                                       class="button is-primary is-fullwidth">
+                                        <div class="">Удалить фотографию</div>
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{% url 'messenger:chat' account.pk %}" style="color: white;"
+                                   class="button is-danger is-fullwidth">
+                                    <div class="">Написать сообщение</div>
+                                    <ion-icon name="chatbubbles-outline"></ion-icon>
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="modal {% if confirm_photo %} is-active {% endif %}">
+                            <div class="modal-background"></div>
+                            <div class="modal-content">
+                                <div class="columns is-centered mt-3">
+                                    <div class="column is-6">
+                                        <div class="box has-background"
+                                             style="background-color: lavenderblush; margin: 0 0 5px 5px #fcd4dc;">
+                                            <form action="" method="post" enctype="multipart/form-data">
+                                                <div class="has-text-right">
+                                                    <a href="{% url 'head:profile' user.pk %}">
+                                                        <ion-icon class="is-size-3" name="close-outline"></ion-icon>
+                                                    </a>
+                                                </div>
+                                                {% csrf_token %}
+                                                {% for field in form %}
+                                                    <div class="field">
+                                                        <label for="{{ field.id_for_label }}" class="label">
+                                                            {{ field.label }}
+                                                        </label>
+                                                        <div class="control">
+                                                            {{ field }}
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                                {% if form.errors %}
+                                                    <ul>
+                                                        {% for error in form.errors.values %}
+                                                            <li class="has-text-danger">{{ error }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                                <div class="has-text-centered">
+                                                    <button class="button is-danger is-fullwidth">
+                                                        Изменить
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-6" style="margin-bottom: 13px; padding-bottom: 13px">
+                        {% if account.user == request.user %}
+                        <div class="title"
+                             style="font-size: 58px; font-family: 'Comic Sans MS'; color: lightsalmon">Мой 
+                            профиль
+                        </div>
+                        {% endif %}
+                        <div class="box" style="box-shadow: 0 0 5px 5px #fcd4dc">
+                            <ul>
+                                <li class="title">
+                                    {{ account }}
+                                </li>
+                                <li class="subtitle">
+                                    {{ account.status }}
+                                </li>
+                                <li>Возраст - {% if account.age %} {{ account.age }} {% else %} не
+                                    указан {% endif %}</li>
+                                <li>Город - {% if account.city %} {{ account.city }} {% else %} не
+                                    указан {% endif %}</li>
+                                <li>Карьера - {% if account.job %} {{ account.job }} {% else %} не
+                                    указана {% endif %}</li>
+                                <li>Увлечения - {% if account.hobbies %} {{ account.hobbies }} {% else %} не
+                                    указаны {% endif %}</li>
+                                <li>Пол - {% if account.gender and account.gender != '---' %} {{ account.gender }} {% else %} не
+                                    указан {% endif %}</li>
+                            </ul>
+                            <hr>
+                            {% if account.user == request.user %}
+                                <a href="{% url 'head:settings' user.pk %}" class="button is-danger has-text-centered" style="color: white">
+                                    Редактировать <ion-icon name="create-outline"></ion-icon>
+                                </a>
+                            {% endif %}
+                            
+                        </div>
+                    </div>
+                    <div class="column is-12">
+                        <div class="box" style="box-shadow: 0 0 5px 5px #fcd4dc">
+                            <div class="title">
+                                О себе
+                            </div>
+                            <hr>
+                            {% if account.biography %}
+                                <div class="subtitle">
+                                    {{ account.biography }}
+                                </div>
+                            {% else %}
+                                {% if account.user == request.user %}
+                                    <div class="subtitle has-text-grey">
+                                        Оставьте информацию о себе
+                                    </div>
+                                {% else %}
+                                    <div class="subtitle has-text-grey">
+                                            {{ account }} еще не оставил(а) информацию о себе
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            {% if account.user == request.user %}
+                            <a href="{% url 'head:edit_about' user.pk %}?action=about_me" class="button is-danger has-text-centered" style="color: white">
+                                Редактировать<ion-icon name="create-outline"></ion-icon>
+                            </a>   
+                            {% endif %}
+                            <div class="modal {% if confirm_about %} is-active {% endif %}">
+                                <div class="modal-background"></div>
+                                <div class="modal-content">
+                                    <div class="columns is-centered mt-3">
+                                        <div class="column is-6">
+                                            <div class="box has-background"
+                                                 style="background-color: lavenderblush; box-shadow: 0 0 5px 5px #fcd4dc">
+                                                <form method="post" enctype="multipart/form-data">
+                                                    {% if user.is_authenticated %}
+                                                    <div class="has-text-right">
+                                                        <a href="{% url 'head:profile' user.pk %}">
+                                                            <ion-icon class="is-size-3" name="close-outline"></ion-icon>
+                                                        </a>
+                                                    </div>
+                                                    {% endif %}
+                                                    {% csrf_token %}
+                                                    {{ about_me_form }}
+                                                    <div class="has-text-centered">
+                                                        <button class="button is-danger is-fullwidth">
+                                                            Изменить
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-12">
+                        <div class="box" style="box-shadow: 0 0 5px 5px #fcd4dc">
+                            <div class="title">
+                                <div class="title">
+                                    Фотографии
+                                </div>
+                                <hr>
+                                {% if account.user == request.user %}
+                                    {% if not account.my_photos.all %}
+                                    <div class="subtitle has-text-grey">
+                                        Добавьте фотографии
+                                    </div>
+                                    {% endif %}
+                                    <a href="{% url 'head:photo' user.pk %}" class="button is-danger" style="color: white">
+                                        Добавить <ion-icon name="camera-outline"></ion-icon>
+                                    </a>
+                                {% else %}
+                                    {% if not account.my_photos.all %}
+                                    <div class="subtitle has-text-grey">
+                                        {{account.user}} ещё не добавил(a) фотографии
+                                    </div>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="image">
+                                <div class="table" style="width: 70%; margin-left: 20vh">
+                                    {% for my_photo in account.my_photos.all %}
+                                    <div class="box" style="box-shadow: 0 0 5px 5px #fcd4dc">
+                                        <img src="{{ my_photo.photo.url }}" alt="">
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
