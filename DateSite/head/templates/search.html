@@ -157,7 +157,7 @@
                 </div>
             </div>
     
-            {% if form.is_valid %}
+            {% if form.is_valid or search_users %}
             <div class="title has-text-centered" style="font-family: 'Comic Sans MS'; margin-top: 10px">
                 Результаты поиска
             </div>
@@ -215,19 +215,15 @@
                     </div>
                     {% endfor %}
                 </div>
+            
             <a href="{% url 'head:search' %}" class="button is-danger has-text-right" style="color: white; position: fixed; bottom: 40px; right: 50px">
                 К поиску
             </a>
-            {% elif search and not search_users %}
+            {% elif not profiles and not search_users %}
             <div class="has-text-centered" style="font-family: 'Comic Sans MS'; margin-top: 10px">Не найдено</div>
             <a href="{% url 'head:search' %}" class="button is-danger has-text-right" style="color: white; position: fixed; bottom: 40px; right: 50px">
                 К поиску
             </a>
-            {% elif search_users %}
-            <a href="{% url 'head:search' %}" class="button is-danger has-text-right" style="color: white; position: fixed; bottom: 40px; right: 50px">
-                К поиску
-            </a>
-            {% endif %}
             {% endif %}
             {% for search_profile in search_users %}
             <div class="column is-4">
@@ -280,6 +276,20 @@
                 </div>
             </div>
             {% endfor %}
+            {% if search_users %}
+            <a href="{% url 'head:search' %}" class="button is-danger has-text-right" style="color: white; position: fixed; bottom: 40px; right: 50px">
+                К поиску
+            </a>
+            {% endif %}
+            {% elif search and not search_users %}
+            <div class="title has-text-centered" style="font-family: 'Comic Sans MS'; margin-top: 10px">
+                Результаты поиска
+            </div>
+            <div class="has-text-centered" style="font-family: 'Comic Sans MS'; margin-top: 10px">Не найдено</div>
+            <a href="{% url 'head:search' %}" class="button is-danger has-text-right" style="color: white; position: fixed; bottom: 40px; right: 50px">
+                К поиску
+            </a>
+            {% endif %}
         </div>
     </div>
 </div>
