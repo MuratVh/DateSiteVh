@@ -54,8 +54,8 @@ def chats(request, pk):
     return render(request, 'companions.html', {'chats_data': chats_data, 'all_companions': all_companions, 'account': account}) 
 
 def chat(request, pk):
-    companion_pk = Profile.objects.get(pk=pk)
-    if companion_pk == request.user.profile:
+    companion = Profile.objects.get(pk=pk)
+    if companion == request.user.profile:
         return render(request, 'error.html')
     
     account = Profile.objects.get(user__username=request.user.username)
@@ -63,12 +63,12 @@ def chat(request, pk):
     form = MessageForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         form.save(commit=False)
-        Message.objects.create(user=request.user, message=form.data['message'], companion=companion_pk)
+        Message.objects.create(user=request.user, message=form.data['message'], companion=companion)
         return redirect('messenger:chat', pk=pk)
     chat_my_data = Message.objects.filter(user=request.user, companion__pk=pk)
-    chat_companion_data = Message.objects.filter(user=companion_pk.user, companion=account)
+    chat_companion_data = Message.objects.filter(user=companion.user, companion=account)
     chat_data=chat_my_data.union(chat_companion_data).order_by('date')
-    return render(request, 'messages.html', {'chat_data': chat_data, 'companion': companion_pk, 'form': form, 'account': account})
+    return render(request, 'messages.html', {'chat_data': chat_data, 'companion': companion, 'form': form, 'account': account})
 
 def delete_message(request, id):
     action = request.GET.get('action')
